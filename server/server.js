@@ -11,14 +11,24 @@ var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-io.on('connection',(socket)=>{
+io.on('connection',function(socket){
   console.log('New user connected');
 
-  socket.on('disconnect',()=>{
+ socket.emit('newMessage',{
+   from:'mic@example.com',
+   text:'Hery, What is going on',
+   createAt : 123
+ });
+
+  socket.on('createMessage',(newMessage)=>{
+    console.log('createMessage',newMessage);
+  });
+
+  socket.on('disconnect',function(){
     console.log('Client disconnected');
   });
 });
 
-server.listen(port,()=>{
+server.listen(port,function(){
   console.log('Server is up on port ',port);
 });
